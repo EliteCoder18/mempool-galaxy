@@ -8,8 +8,8 @@ members = ["mg-core",
 resolver = "2"
 
 [workspace.dependencies]
-bitcoin="0.32.0"
-bdk_chain = "0.1.0"
+bitcoin={version = "0.32.0", features = ["serde"]}
+bdk_chain = "0.23.3"
 tokio = {version="1.40",features=["full"]}
 
 
