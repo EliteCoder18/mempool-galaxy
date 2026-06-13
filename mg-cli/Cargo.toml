@@ -1,0 +1,12 @@
+[package]
+name = "mg-cli"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+mg-core = {path = "../mg-core"}
+mg-physics = {path = "../mg-physics"}
+mg-pipeline = {path = "../mg-pipeline"}
+mg-renderer = {path = "../mg-renderer"}
+clap = {version = "4.5", features = ["derive"]} # command line arguement parser
+tokio = {workspace = true}

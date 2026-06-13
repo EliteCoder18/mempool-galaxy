@@ -1,0 +1,16 @@
+[workspace]
+members = ["mg-core",
+    "mg-pipeline",
+    "mg-physics",
+    "mg-renderer",
+    "mg-cli"
+]
+resolver = "2"
+
+[workspace.dependencies]
+bitcoin="0.32.0"
+bdk_chain = "0.1.0"
+tokio = {version="1.40",features=["full"]}
+
+
+
