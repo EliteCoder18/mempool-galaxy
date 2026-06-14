@@ -11,6 +11,6 @@ resolver = "2"
 bitcoin={version = "0.32.0", features = ["serde"]}
 bdk_chain = "0.23.3"
 tokio = {version="1.40",features=["full"]}
-
+serde = {version = "1",features = ["derive"]}
 
 

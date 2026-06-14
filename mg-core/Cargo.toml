@@ -7,4 +7,4 @@ edition = "2024"
 bitcoin = { workspace = true }
 bdk_chain = { workspace = true }
 tokio = { workspace = true}
-serde = {version = "1.0.228",features = ["derive"]}
+serde = {workspace = true}
