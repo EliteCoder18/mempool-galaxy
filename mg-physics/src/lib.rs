@@ -4,7 +4,7 @@ pub fn update_physics(state: &mut MempoolState, dt: f32) {
     let center = (0.0, 0.0);
     let gravity_constant = 0.5;
 
-    for p in state.particle.iter_mut() {
+    for p in state.particles.iter_mut() {
         let dx = center.0 - p.pos.0;
         let dy = center.1 - p.pos.1;
         let dist = (dx * dx + dy * dy).sqrt().max(1.0);

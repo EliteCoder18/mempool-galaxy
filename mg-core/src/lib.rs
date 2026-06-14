@@ -22,7 +22,7 @@ pub struct MempoolStats {
 #[derive(Debug, Default)]
 pub struct MempoolState {
     pub txs: HashMap<Txid, TxEntry>,
-    pub particle: Vec<Particle>,
+    pub particles: Vec<Particle>,
     pub graph: TxGraph,
     pub stats: MempoolStats,
 }
@@ -37,7 +37,7 @@ impl MempoolState {
     pub fn new() -> Self {
         Self {
             txs: HashMap::new(),
-            particle: Vec::default(),
+            particles: Vec::default(),
             graph: TxGraph::default(),
             stats: MempoolStats::default(),
         }

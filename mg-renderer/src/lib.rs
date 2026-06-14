@@ -28,4 +28,17 @@ impl Renderer {
         out.flush()?;
         Ok(())
     }
+    pub fn draw_particles(&self, particles: &[mg_core::Particle])->Result<()>{
+        let mut out = stdout();
+        out.execute(terminal::Clear(terminal::ClearType::All))?;
+        
+        for p in particles{
+            let x = p.pos.0 as u16;
+            let y = p.pos.1 as u16;
+            out.execute(cursor::MoveTo(x,y));
+            out.execute(Print("*"));
+        }
+        out.flush()?;
+        Ok(())
+    }
 }
