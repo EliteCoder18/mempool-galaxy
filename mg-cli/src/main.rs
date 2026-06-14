@@ -1,12 +1,16 @@
-use std::sync::{Arc, RwLock};
+use crossterm::terminal;
 use mg_core::MempoolState;
 use mg_renderer::Renderer;
+use std::sync::{Arc, RwLock};
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let state = Arc::new(RwLock::new(MempoolState::new()));
     let renderer = Renderer;
     Renderer::init()?;
-
+    if let Ok((cols, rows)) = crossterm::terminal::size() {
+        let mut w_state = state.write().unwrap();
+        w_state.screen_size = (cols as f32, rows as f32);
+    }
     for _ in 0..60 {
         {
             let mut w_state = state.write().unwrap();

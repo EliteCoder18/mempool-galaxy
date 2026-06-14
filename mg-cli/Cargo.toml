@@ -10,3 +10,4 @@ mg-pipeline = {path = "../mg-pipeline"}
 mg-renderer = {path = "../mg-renderer"}
 clap = {version = "4.5", features = ["derive"]} # command line arguement parser
 tokio = {workspace = true}
+crossterm = {workspace = true}

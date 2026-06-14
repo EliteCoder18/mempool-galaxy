@@ -25,6 +25,7 @@ pub struct MempoolState {
     pub particles: Vec<Particle>,
     pub graph: TxGraph,
     pub stats: MempoolStats,
+    pub screen_size: (f32, f32),
 }
 #[derive(Debug, Clone)]
 pub struct Particle {
@@ -40,6 +41,7 @@ impl MempoolState {
             particles: Vec::default(),
             graph: TxGraph::default(),
             stats: MempoolStats::default(),
+            screen_size: (120.0, 40.0),
         }
     }
 

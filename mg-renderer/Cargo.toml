@@ -5,4 +5,4 @@ edition = "2024"
 
 [dependencies]
 mg-core = {path = "../mg-core"}
-crossterm = "0.28.1"
+crossterm = {workspace = true}
