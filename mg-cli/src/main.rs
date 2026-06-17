@@ -10,6 +10,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     if let Ok((cols, rows)) = crossterm::terminal::size() {
         let mut w_state = state.write().unwrap();
         w_state.screen_size = (cols as f32, rows as f32);
+        let state_clone = Arc::clone(&state);
+        tokio::spawn(async move {
+         mg_pipeline::run_websocket(state_clone).await;
+    });
     }
     for _ in 0..60 {
         {
