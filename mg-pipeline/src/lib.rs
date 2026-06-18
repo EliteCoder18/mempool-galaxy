@@ -15,6 +15,9 @@ pub async fn run_websocket(state: Arc<RwLock<MempoolState>>){
 
     while let Some(msg) = read.next().await{
         if let Ok(Message::Text(text)) = msg{
+
+            println!("Received message: { }", text);
+            
             if let Ok(json) = serde_json::from_str::<Value>(&text){
                 if json["op"] == "utx"{
             

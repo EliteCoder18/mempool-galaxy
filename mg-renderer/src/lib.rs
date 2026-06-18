@@ -1,6 +1,6 @@
 use crossterm::{
     ExecutableCommand, cursor,
-    style::{Color, Print, SetForegroundColor},
+    style::{Color, Print, SetForegroundColor,ResetColor},
     terminal,
 };
 use std::io::{Result, Write, stdout};
@@ -35,9 +35,20 @@ impl Renderer {
         for p in particles {
             let x = p.pos.0.clamp(0.0, 200.0) as u16;
             let y = p.pos.1.clamp(0.0, 100.0) as u16;
+
+            let (symbol,color) = if p.fee_rate > 30.0{
+                ("O", Color::Red)
+            }else if p.fee_rate>10.0{
+                ("o", Color::Yellow)
+            }
+            else {
+                (".", Color::DarkGrey)
+            };
             out.execute(cursor::MoveTo(x, y));
-            out.execute(Print("●"));
+            out.execute(SetForegroundColor(color))?;
+            out.execute(Print(symbol))?;
         }
+        out.execute(ResetColor)?;
         out.flush()?;
         Ok(())
     }

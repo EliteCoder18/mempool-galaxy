@@ -15,7 +15,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
          mg_pipeline::run_websocket(state_clone).await;
     });
     }
-    for _ in 0..60 {
+    loop {
         {
             let mut w_state = state.write().unwrap();
             mg_physics::update_physics(&mut w_state, 0.1);
@@ -23,7 +23,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         {
             let r_state = state.read().unwrap();
-            renderer.draw_particles(&r_state.particles)?;
+            renderer.draw_particles(&r_state.particles).expect("Renderer failed to draw");
         }
         tokio::time::sleep(std::time::Duration::from_millis(16)).await;
     }

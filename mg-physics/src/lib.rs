@@ -5,6 +5,13 @@ pub fn update_physics(state: &mut MempoolState, dt: f32) {
     let gravity_constant = 0.5;
     let friction = 0.95;
 
+    state.particles.retain(|p|{
+        let dx = center.0-p.pos.0;
+        let dy = center.1-p.pos.1;
+        let dist = (dx*dx+dy*dy).sqrt();
+        dist>2.0
+    });
+
     for p in state.particles.iter_mut() {
         let dx = center.0 - p.pos.0;
         let dy = center.1 - p.pos.1;
