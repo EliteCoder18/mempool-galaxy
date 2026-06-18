@@ -1,33 +1,54 @@
-use crossterm::terminal;
+use crossterm::event::{self, Event, KeyCode, KeyModifiers};
 use mg_core::MempoolState;
 use mg_renderer::Renderer;
 use std::sync::{Arc, RwLock};
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let state = Arc::new(RwLock::new(MempoolState::new()));
     let renderer = Renderer;
+
     Renderer::init()?;
-    if let Ok((cols, rows)) = crossterm::terminal::size() {
-        let mut w_state = state.write().unwrap();
-        w_state.screen_size = (cols as f32, rows as f32);
-        let state_clone = Arc::clone(&state);
-        tokio::spawn(async move {
-         mg_pipeline::run_websocket(state_clone).await;
-    });
+
+    {
+        let (cols, rows) = crossterm::terminal::size()?;
+        let mut w = state.write().unwrap();
+        w.screen_size = (cols as f32, rows as f32);
     }
+
+    let state_clone = Arc::clone(&state);
+    tokio::spawn(async move {
+        mg_pipeline::run_websocket(state_clone).await;
+    });
+
     loop {
-        {
-            let mut w_state = state.write().unwrap();
-            mg_physics::update_physics(&mut w_state, 0.1);
+        // check for 'q' or Ctrl-C without blocking
+        if event::poll(std::time::Duration::from_millis(0))? {
+            if let Event::Key(key) = event::read()? {
+                let quit = key.code == KeyCode::Char('q')
+                    || (key.code == KeyCode::Char('c')
+                        && key.modifiers.contains(KeyModifiers::CONTROL));
+                if quit {
+                    break;
+                }
+            }
         }
 
         {
-            let r_state = state.read().unwrap();
-            renderer.draw_particles(&r_state.particles).expect("Renderer failed to draw");
+            let mut w = state.write().unwrap();
+            mg_physics::update_physics(&mut w, 0.1);
         }
+
+        {
+            let r = state.read().unwrap();
+            renderer
+                .draw_particles(&r.particles, &r.connection_status)
+                .expect("draw failed");
+        }
+
         tokio::time::sleep(std::time::Duration::from_millis(16)).await;
     }
+
     Renderer::cleanup()?;
-    println!("Renderer test Complete.");
     Ok(())
 }

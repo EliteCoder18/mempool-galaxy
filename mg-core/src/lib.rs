@@ -19,6 +19,14 @@ pub struct MempoolStats {
     pub p50_fee: f64,
 }
 
+#[derive(Debug, Clone, Default, PartialEq)]
+pub enum ConnectionStatus {
+    #[default]
+    Connecting,
+    Connected,
+    Failed,
+}
+
 #[derive(Debug, Default)]
 pub struct MempoolState {
     pub txs: HashMap<Txid, TxEntry>,
@@ -26,6 +34,7 @@ pub struct MempoolState {
     pub graph: TxGraph,
     pub stats: MempoolStats,
     pub screen_size: (f32, f32),
+    pub connection_status: ConnectionStatus,
 }
 #[derive(Debug, Clone)]
 pub struct Particle {
@@ -42,6 +51,7 @@ impl MempoolState {
             graph: TxGraph::default(),
             stats: MempoolStats::default(),
             screen_size: (120.0, 40.0),
+            connection_status: ConnectionStatus::Connecting,
         }
     }
 
