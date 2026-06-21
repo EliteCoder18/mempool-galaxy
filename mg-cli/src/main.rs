@@ -24,7 +24,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     loop {
         // check for 'q' or Ctrl-C without blocking
         if event::poll(std::time::Duration::from_millis(0))? {
-            if let Event::Key(key) = event::read()? {
+            match event::read()?{
+            Event::Key(key)=>{
                 let quit = key.code == KeyCode::Char('q')
                     || (key.code == KeyCode::Char('c')
                         && key.modifiers.contains(KeyModifiers::CONTROL));
@@ -32,7 +33,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     break;
                 }
             }
-        }
+            Event::Resize(cols,rows)=>{
+                let mut w = state.write().unwrap();
+                w.screen_size = (cols as f32, rows as f32);
+            }
+            _=>{}
+        }}
 
         {
             let mut w = state.write().unwrap();
@@ -42,7 +48,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         {
             let r = state.read().unwrap();
             renderer
-                .draw_particles(&r.particles, &r.connection_status)
+                .draw_particles(&r)
                 .expect("draw failed");
         }
 
